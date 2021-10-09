@@ -16,14 +16,30 @@ const App : React.FC = (props)=>{
 
   const [robotGallery,setRobotGallery] = useState<any>([]);
 
+  const [loading,setLoading]= useState<boolean>(false)
+
+  const [error,setError] = useState<string>()
+
   useEffect(()=>{
     document.title=`点击${count}次`
   },[count])
 
   useEffect(()=>{
-    fetch('https://jsonplaceholder.typicode.com/users')
-    .then(response=>response.json())
-    .then(data=>setRobotGallery(data))
+    const fetchData = async ()=>{
+      setLoading(true)
+
+      try{
+        const responses = await fetch("https://jsonplaceholder.typicode.com/users")
+        const data = await responses.json()
+        setRobotGallery(data)  
+      }catch(e){
+        if(e instanceof Error){
+          setError(e.message)
+        }
+      }
+      setLoading(false)
+    }
+    fetchData();
   },[])
 
     return (
@@ -35,12 +51,17 @@ const App : React.FC = (props)=>{
         <button onClick={() => {
           setCount(count+1)
         }}>count {count}</button>
+        {(!error || error !=='') && <div>网站出错：{error}</div> }
         <ShoppingCart />
-        <div className={styles.robotList}>
+        {
+          !loading?
+          <div className={styles.robotList}>
           {
             robotGallery.map((r:any) => <Robot id={r.id} name={r.name} email={r.email} />)
           }
         </div>
+        :<h2>loading 加载中</h2>
+        }
       </div>
     )
   
