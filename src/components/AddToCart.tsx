@@ -13,7 +13,13 @@ interface RobotPropsA {
 //ChildComponent:React.ComponentType            react组件类型
 export const withAddToCart = (ChildComponent: React.ComponentType<RobotProps>) => {
     return (props:RobotPropsA) => {
-        const setState = useContext(appSetStateContext);
+        const addToCart=useAddToCart();
+        return <ChildComponent  {...props} addToCart={addToCart} />
+    }
+}
+
+export const useAddToCart = () => {//自定义hook
+    const setState = useContext(appSetStateContext);
         const addToCart = (id: number, name: string) => {
             if (setState) {
                 setState(state => {
@@ -27,6 +33,5 @@ export const withAddToCart = (ChildComponent: React.ComponentType<RobotProps>) =
                 )
             }
         }
-        return <ChildComponent  {...props} addToCart={addToCart} />
-    }
+        return addToCart;
 }

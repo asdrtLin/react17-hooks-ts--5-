@@ -13,7 +13,7 @@ export interface RobotProps {
     addToCart:(id:number,name:string)=>void;
 }
 
-const Robot: React.FC<RobotProps> = ({ id, name, email , addToCart }) => {
+const Robot: React.FC<RobotProps> = ({ id, name, email , addToCart }) => {//使用高阶函数
     const value = useContext(appContext)
 
     return (
